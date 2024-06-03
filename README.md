@@ -15,7 +15,7 @@
   </tr>
   <tr>
     <td>Gabriel Araújo</td>
-    <td>...</td>
+    <td>191346</td>
   </tr>
   <tr>
     <td>Jabes Candido</td>
