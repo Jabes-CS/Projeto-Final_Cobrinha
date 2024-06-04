@@ -108,20 +108,5 @@ def rodar_jogo():
 
         relogio.tick(velocidade_jogo)
 
-# Criar um loop Infinito
-
-# Desenhar os objetos do jogo na tela
-# -pontuação
-# -cobrinha
-# -comida
-
-# Criar a lógica de terminar o Jogo
-# -o que acontece:
-# -cobra bateu na parede
-# -Cobra bateu na própria cobra
-
-# Pegar a interação do usuário
-# -fechou a tela
-# -apertou as teclas do teclado para mover a cobra
 
 rodar_jogo()
