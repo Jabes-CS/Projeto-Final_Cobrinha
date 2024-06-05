@@ -1,5 +1,5 @@
 # Configurações iniciais
-import pygame
+import pygame # type: ignore
 import random
 
 pygame.init()
@@ -18,7 +18,7 @@ verde = (0, 255, 0)
 tamanho_quadrado = 20
 velocidade_jogo = 15 # Podemos implementar também que quanto mais a cobra vai crescendo ela vai ficando mais rápida
 
-def gerar_cimida():
+def gerar_comida():
     comida_x = round(random.randrange(0, largura - tamanho_quadrado) / float(tamanho_quadrado)) * float(tamanho_quadrado)
     comida_y = round(random.randrange(0, altura - tamanho_quadrado) / float(tamanho_quadrado)) * float(tamanho_quadrado)
     return comida_x, comida_y
@@ -62,7 +62,7 @@ def rodar_jogo():
     tamanho_cobra = 1
     pixels = []
 
-    comida_x, comida_y = gerar_cimida()
+    comida_x, comida_y = gerar_comida()
 
     while not fim_jogo:
         tela.fill(preta)
@@ -104,7 +104,7 @@ def rodar_jogo():
         # -criar nova comida
         if x == comida_x and y == comida_y:
             tamanho_cobra += 1
-            comida_x, comida_y = gerar_cimida()
+            comida_x, comida_y = gerar_comida()
 
         relogio.tick(velocidade_jogo)
 
