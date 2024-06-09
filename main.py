@@ -108,12 +108,8 @@ def rodar_jogo():
         # -criar nova comida
         if x == comida_x and y == comida_y:
             tamanho_cobra += 1
-<<<<<<< HEAD
             pontuacao += 1
-            comida_x, comida_y = gerar_cimida()
-=======
             comida_x, comida_y = gerar_comida()
->>>>>>> ee19c66c47f678927f2af7fe790694cfeb9e3588
 
             # Aumentar a velocidade a cada 5 pontos
             if pontuacao % 5 == 0:
