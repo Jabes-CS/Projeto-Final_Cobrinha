@@ -119,3 +119,4 @@ def rodar_jogo():
 
 
 rodar_jogo()
+pygame.quit() # Garantir que todos os  módulos do Pygame sejam encerrados corretamente
