@@ -16,7 +16,8 @@ verde = (0, 255, 0)
 
 # Parametros da cobrinha
 tamanho_quadrado = 20
-velocidade_jogo = 15 # Podemos implementar também que quanto mais a cobra vai crescendo ela vai ficando mais rápida
+velocidade_inicial = 6 # Podemos implementar também que quanto mais a cobra vai crescendo ela vai ficando mais rápida
+aumento_velocidade = 2 # Este valor será aumentado a cada 5 pontos alcançado no jogo
 
 def gerar_cimida():
     comida_x = round(random.randrange(0, largura - tamanho_quadrado) / float(tamanho_quadrado)) * float(tamanho_quadrado)
@@ -64,6 +65,9 @@ def rodar_jogo():
 
     comida_x, comida_y = gerar_cimida()
 
+    pontuacao = 0
+    velocidade_jogo = velocidade_inicial
+
     while not fim_jogo:
         tela.fill(preta)
         
@@ -104,7 +108,12 @@ def rodar_jogo():
         # -criar nova comida
         if x == comida_x and y == comida_y:
             tamanho_cobra += 1
+            pontuacao += 1
             comida_x, comida_y = gerar_cimida()
+
+            # Aumentar a velocidade a cada 5 pontos
+            if pontuacao % 5 == 0:
+                velocidade_jogo += aumento_velocidade
 
         relogio.tick(velocidade_jogo)
 
