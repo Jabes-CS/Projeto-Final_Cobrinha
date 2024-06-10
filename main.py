@@ -34,10 +34,14 @@ def desenhar_cobra(tamanho, pixels, frame_count):
 
         # Adicionando luz piscando ao redor da cobrinha
         if frame_count % 20 < 10:  # Piscando a cada 10 frames
-            pygame.draw.rect(tela, azul, [pixel[0] - tamanho, pixel[1], tamanho, tamanho])
-            pygame.draw.rect(tela, azul, [pixel[0] + tamanho, pixel[1], tamanho, tamanho])
-            pygame.draw.rect(tela, azul, [pixel[0], pixel[1] - tamanho, tamanho, tamanho])
-            pygame.draw.rect(tela, azul, [pixel[0], pixel[1] + tamanho, tamanho, tamanho])
+            # Desenhando a borda superior
+            pygame.draw.rect(tela, azul, [pixel[0], pixel[1], tamanho, 2])
+            # Desenhando a borda inferior
+            pygame.draw.rect(tela, azul, [pixel[0], pixel[1] + tamanho - 2, tamanho, 2])
+            # Desenhando a borda esquerda
+            pygame.draw.rect(tela, azul, [pixel[0], pixel[1], 2, tamanho])
+            # Desenhando a borda direita
+            pygame.draw.rect(tela, azul, [pixel[0] + tamanho - 2, pixel[1], 2, tamanho])
 
 def desenhar_pontuacao(pontuacao):
     fonte = pygame.font.SysFont("Helvetica", 35)
@@ -90,7 +94,7 @@ def rodar_jogo():
         desenhar_comida(tamanho_quadrado, comida_x, comida_y)
 
         # -atualizar a posição da cobra
-        if x < 0 or x >= largura or y < 0 or y>= altura:
+        if x < 0 or x >= largura or y < 0 or y >= altura:
             fim_jogo = True
 
         x += velocidade_x
