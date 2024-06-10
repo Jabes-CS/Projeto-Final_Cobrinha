@@ -13,6 +13,7 @@ preta = (0, 0, 0)
 branca = (255, 255, 255)
 vermelha = (255, 0, 0)
 verde = (0, 255, 0)
+azul = (0, 0, 255)
 
 # Parametros da cobrinha
 tamanho_quadrado = 20
@@ -27,9 +28,16 @@ def gerar_comida():
 def desenhar_comida(tamanho, comida_x, comida_y):
     pygame.draw.rect(tela, verde, [comida_x, comida_y, tamanho, tamanho])
 
-def desenhar_cobra(tamanho, pixels):
+def desenhar_cobra(tamanho, pixels, frame_count):
     for pixel in pixels:
         pygame.draw.rect(tela, branca, [pixel[0], pixel[1], tamanho, tamanho])
+
+        # Adicionando luz piscando ao redor da cobrinha
+        if frame_count % 20 < 10:  # Piscando a cada 10 frames
+            pygame.draw.rect(tela, azul, [pixel[0] - tamanho, pixel[1], tamanho, tamanho])
+            pygame.draw.rect(tela, azul, [pixel[0] + tamanho, pixel[1], tamanho, tamanho])
+            pygame.draw.rect(tela, azul, [pixel[0], pixel[1] - tamanho, tamanho, tamanho])
+            pygame.draw.rect(tela, azul, [pixel[0], pixel[1] + tamanho, tamanho, tamanho])
 
 def desenhar_pontuacao(pontuacao):
     fonte = pygame.font.SysFont("Helvetica", 35)
@@ -67,6 +75,7 @@ def rodar_jogo():
 
     pontuacao = 0
     velocidade_jogo = velocidade_inicial
+    frame_count = 0
 
     while not fim_jogo:
         tela.fill(preta)
@@ -97,7 +106,7 @@ def rodar_jogo():
             if pixel == [x, y]:
                 fim_jogo = True
 
-        desenhar_cobra(tamanho_quadrado, pixels)
+        desenhar_cobra(tamanho_quadrado, pixels, frame_count)
 
         # -desenhar_pontos
         desenhar_pontuacao(tamanho_cobra - 1)
@@ -116,7 +125,7 @@ def rodar_jogo():
                 velocidade_jogo += aumento_velocidade
 
         relogio.tick(velocidade_jogo)
-
+        frame_count += 1
 
 rodar_jogo()
 pygame.quit() # Garantir que todos os  módulos do Pygame sejam encerrados corretamente
