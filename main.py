@@ -1,6 +1,7 @@
 # Configurações iniciais
 import pygame # type: ignore
 import random
+import time
 
 pygame.init()
 pygame.display.set_caption("Jogo Snake Python")
@@ -19,6 +20,8 @@ azul = (0, 0, 255)
 tamanho_quadrado = 20
 velocidade_inicial = 6 # Podemos implementar também que quanto mais a cobra vai crescendo ela vai ficando mais rápida
 aumento_velocidade = 2 # Este valor será aumentado a cada 5 pontos alcançado no jogo
+impulso_velocidade = 10 # Velocidade de impulso aumentada
+tempo_para_impulso = 0.5 # Tempo em segundos para ativar o impusso
 
 def gerar_comida():
     comida_x = round(random.randrange(0, largura - tamanho_quadrado) / float(tamanho_quadrado)) * float(tamanho_quadrado)
@@ -48,7 +51,7 @@ def desenhar_pontuacao(pontuacao):
     texto = fonte.render(f"Pontos: {pontuacao}", True, vermelha)
     tela.blit(texto, [1, 1])
 
-def selecionar_velocidade(tecla):
+def selecionar_velocidade(tecla, velocidade_x, velocidade_y):
     if tecla == pygame.K_DOWN:
         velocidade_x = 0
         velocidade_y = tamanho_quadrado
@@ -81,6 +84,20 @@ def rodar_jogo():
     velocidade_jogo = velocidade_inicial
     frame_count = 0
 
+    impulso = {
+        "direita": False,
+        "esquerda": False,
+        "cima": False,
+        "baixo": False
+    }
+
+    tecla_tempo = {
+        "direita": None,
+        "esquerda": None,
+        "cima": None,
+        "baixo": None
+    }
+
     while not fim_jogo:
         tela.fill(preta)
         
@@ -88,7 +105,45 @@ def rodar_jogo():
             if evento.type == pygame.QUIT:
                 fim_jogo = True
             elif evento.type == pygame.KEYDOWN:
-                velocidade_x, velocidade_y = selecionar_velocidade(evento.key)
+                if evento.key in [pygame.K_DOWN, pygame.K_UP, pygame.K_RIGHT, pygame.K_LEFT]:
+                    velocidade_x, velocidade_y = selecionar_velocidade(evento.key, velocidade_x, velocidade_y)
+                if evento.key == pygame.K_RIGHT and velocidade_x > 0:
+                    tecla_tempo["direita"] = time.time()
+                if evento.key == pygame.K_LEFT and velocidade_x < 0:
+                    tecla_tempo["esquerda"] = time.time()
+                if evento.key == pygame.K_UP and velocidade_y < 0:
+                    tecla_tempo["cima"] = time.time()
+                if evento.key == pygame.K_DOWN and velocidade_y > 0:
+                    tecla_tempo["baixo"] = time.time()
+            elif evento.type == pygame.KEYUP:
+                if evento.key == pygame.K_RIGHT:
+                    impulso["direita"] = False
+                    tecla_tempo["direita"] = None
+                if evento.key == pygame.K_LEFT:
+                    impulso["esquerda"] = False
+                    tecla_tempo["esquerda"] = None
+                if evento.key == pygame.K_UP:
+                    impulso["cima"] = False
+                    tecla_tempo["cima"] = None
+                if evento.key == pygame.K_DOWN:
+                    impulso["baixo"] = False
+                    tecla_tempo["baixo"] = None
+
+        current_time = time.time()
+        for direcao in tecla_tempo:
+            if tecla_tempo[direcao] is not None and current_time - tecla_tempo[direcao] >= tempo_para_impulso:
+                impulso[direcao] = True
+
+        if impulso["direita"] and velocidade_x > 0:
+            velocidade_jogo_atual = velocidade_jogo + impulso_velocidade
+        elif impulso["esquerda"] and velocidade_x < 0:
+            velocidade_jogo_atual = velocidade_jogo + impulso_velocidade
+        elif impulso["cima"] and velocidade_y < 0:
+            velocidade_jogo_atual = velocidade_jogo + impulso_velocidade
+        elif impulso["baixo"] and velocidade_y > 0:
+            velocidade_jogo_atual = velocidade_jogo + impulso_velocidade
+        else:
+            velocidade_jogo_atual = velocidade_jogo
 
         # -desenhar_comida
         desenhar_comida(tamanho_quadrado, comida_x, comida_y)
@@ -128,7 +183,7 @@ def rodar_jogo():
             if pontuacao % 5 == 0:
                 velocidade_jogo += aumento_velocidade
 
-        relogio.tick(velocidade_jogo)
+        relogio.tick(velocidade_jogo_atual)
         frame_count += 1
 
 rodar_jogo()
